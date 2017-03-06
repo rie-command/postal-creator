@@ -1,0 +1,208 @@
+<html>
+  <head>
+    <title></title>
+    <meta content="">
+    <style>
+        .settings {
+            text-align: center;
+            color: red;
+            width: 200px;
+        }
+
+        .text-to >input[type="text"] {
+            border: 1px solid black;
+            height: 50px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .img >img{
+            height: 100px;
+            width: 200px;
+        }
+
+        .header {
+            display: inline-flex;
+            justify-content: center;
+            width: 100%;
+            background-color: lightgrey;
+        }
+
+        .work-area {
+            padding-top: 30px;
+            display: inline-flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .title {
+            display: inline-flex;
+            color: red;
+            margin: 30px;
+        }
+
+        .canvas {
+            text-align: center;
+            /*background-color: aqua;*/
+        }
+
+        .white{
+            background-color: white;
+            border: 1px solid lightgrey;
+        }
+
+        .black{
+            background-color: black;
+            border: 1px solid lightgrey;
+        }
+
+        .square{
+            height: 23px;
+            width: 23px;
+        }
+
+        .rectangle{
+            height: 23px;
+            width:  95px;
+        }
+
+        .bg-color{
+            display: inline-flex;
+            justify-content: space-between;
+            align-content: space-between;
+            width: 100%;
+        }
+
+        .bg-color >input{
+            width: 70%;
+            height: 25px;
+            border: 1px solid lightgrey;
+        }
+
+        .text-color{
+            display: inline-flex;
+            justify-content: space-between;
+            align-content: space-between;
+            width: 100%;
+        }
+
+        .font-selector{
+            display: inline-flex;
+            justify-content: space-between;
+            align-content: space-between;
+            width: 100%;
+        }
+    </style>
+    <script src="bower_components/fabric.js/dist/fabric.js"></script>
+  </head>
+  <body>
+  <script>
+
+      var canvas = null;
+      var comicSansText = new fabric.Text("Example", {
+          fontStyle: 'italic',
+          fontFamily: 'Delicious',
+//              stroke: '#c3bfbf',
+//              strokeWidth: 3,
+          fontSize: 40,
+          fontWeight: 'bold',
+//              textDecoration: 'line-through',
+//              shadow: 'rgba(0,0,0,0.3) 5px 5px 5px',
+//              textAlign: 'right',
+//              lineHeight: 3,
+//              textBackgroundColor: 'rgb(0,200,0)'
+      });
+
+      function redraw(evt){
+          !canvas && (canvas = new fabric.Canvas('c'));
+
+          switch(evt.type){
+              case "textColor":
+                  comicSansText.set({fill: evt.payload})
+                  break;
+
+              case "textBgColor":
+                  comicSansText.set({textBackgroundColor: evt.payload})
+                  break;
+
+              case "bgColor":
+                  canvas.setBackgroundColor(evt.payload, canvas.renderAll.bind(canvas))
+                  break;
+
+              case "text":
+                  comicSansText.text = document.getElementById('textSrc').value;
+                  break;
+
+              case "fontWidth":
+                  comicSansText.set({fontWeight: evt.payload})
+                  break;
+
+
+          }
+
+
+          canvas.remove(comicSansText);
+          canvas.add(comicSansText);
+          canvas.renderAll();
+      }
+
+
+  </script>
+  <div class="header">
+      <div class="img">
+          <img src="https://cdn.colorlib.com/wp/wp-content/uploads/sites/2/2014/02/Olympic-logo.png">
+      </div>
+      <div class="title">TEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXTTEXT</div>
+  </div>
+  <div class="work-area">
+      <div class="settings">
+          <div class="img-size">
+              <select>
+                  <option>13 x 13 cm</option>
+                  <option>13 x 18 cm</option>
+                  <option>18 x 13 cm</option>
+                  <option>20 x 20 cm</option>
+                  <option>20 x 30 cm</option>
+                  <option>30 x 20 cm</option>
+                  <option>30 x 30 cm</option>
+                  <option>30 x 40 cm</option>
+                  <option>40 x 30 cm</option>
+                  <option>30 x 45 cm</option>
+                  <option>45 x 30 cm</option>
+                  <option>45 x 15 cm</option>
+              </select>
+          </div>
+          <div class="bg-color">
+              <div class="white square"
+                   onmouseup="redraw({type: 'bgColor', payload: 'white'})"></div>
+              <div class="black square"
+                   onmouseup="redraw({type: 'bgColor', payload: 'black'})"></div>
+              <input type="color" id='table-backgroundColor'
+                     onchange="redraw({type: 'bgColor', payload: event.target.value})"/>
+          </div>
+
+          <div class="text-to">
+              <input id="textSrc" type="text" oninput="redraw({type: 'text'});">
+          </div>
+          <div class="text-color">
+              <div class="white rectangle"
+                   onmouseup="redraw({type: 'textColor', payload: 'white'})"></div>
+              <div class="black rectangle"
+                   onmouseup="redraw({type: 'textColor', payload: 'black'})"></div>
+          </div>
+          <div class="font-selector">
+              <div class="normal">Aa</div>
+              <div class="italic">Aa</div>
+              <div class="bold">Aa</div>
+              <div class="underline">Aa</div>
+          </div>
+      </div>
+      <div class="canvas">
+      <canvas id="c" width="500" height="500"></canvas>
+      <div class="download-hr"></div>
+      <div class="external-link"></div>
+  </div>
+  </div>
+
+  </body>
+</html>
